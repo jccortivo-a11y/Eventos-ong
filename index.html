@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#15803d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>SimpliEventos ONG — Inscrições, WhatsApp e Certificados</title>
+  <style>
+    :root {
+      --primary: #15803d;
+      --primary-dark: #166534;
+      --primary-light: #dcfce7;
+      --primary-soft: #f0fdf4;
+      --accent: #ca8a04;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --purple: #7e22ce;
+      --purple-light: #f3e8ff;
+      --radius: 14px;
+      --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 84px; /* Espaço para a barra mobile inferior */
+    }
+
+    /* TOP HEADER */
+    .topbar {
+      background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+      color: #fff;
+      padding: 14px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 12px rgba(22, 101, 52, 0.2);
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+
+    .brand-sub {
+      font-size: 11.5px;
+      opacity: 0.9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .event-select {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 7px 11px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      max-width: 240px;
+      outline: none;
+      cursor: pointer;
+    }
+    .event-select option {
+      color: #0f172a;
+      background: #fff;
+    }
+
+    /* DESKTOP NAV TABS */
+    .desktop-nav {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 66px;
+      z-index: 40;
+    }
+
+    .desktop-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 4px;
+      padding: 0 16px;
+      overflow-x: auto;
+    }
+
+    .nav-tab {
+      border: none;
+      background: transparent;
+      padding: 13px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    .nav-tab:hover {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .nav-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-badge {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+
+    /* MOBILE BOTTOM NAVIGATION BAR */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: none;
+      justify-content: space-around;
+      padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+      z-index: 60;
+      box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.06);
+    }
+
+    .mob-nav-btn {
+      flex: 1;
+      border: none;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 6px 2px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    .mob-nav-btn .icon {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .mob-nav-btn.active {
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .event-select {
+        max-width: 165px;
+      }
+    }
+
+    /* MAIN CONTAINER */
+    .main-container {
+      max-width: 1200px;
+      margin: 18px auto;
+      padding: 0 16px;
+    }
+
+    /* CARDS & GRIDS */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 6px 0 4px;
+      color: var(--text);
+    }
+
+    .kpi-foot {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a, #15803d);
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-whatsapp {
+      background: #16a34a;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+    }
+    .btn-whatsapp:hover {
+      background: #15803d;
+    }
+
+    .btn-purple {
+      background: #7e22ce;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(126, 34, 206, 0.25);
+    }
+    .btn-purple:hover {
+      background: #6b21a8;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-soft {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 12.5px;
+      border-radius: 8px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* SHARE LINK BOX */
+    .share-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 1px solid #86efac;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .share-url-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .share-url-input {
+      flex: 1;
+      min-width: 220px;
+      background: #fff;
+      border: 1px solid #86efac;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #166534;
+      outline: none;
+    }
+
+    /* FILTERS & SEARCH */
+    .toolbar-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .pill-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text-muted);
+      padding: 7px 13px;
+      border-radius: 99px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pill-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* PARTICIPANT CARDS (MOBILE-FIRST & DESKTOP CLEAN) */
+    .participant-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .participant-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .participant-item:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+    }
+
+    .participant-item.selected-cert {
+      border-left: 5px solid #7e22ce;
+      background: #faf5ff;
+    }
+
+    .p-info {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .p-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .p-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .p-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .badge-confirmado {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-pendente {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-cancelado {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-cert {
+      background: #f3e8ff;
+      color: #6b21a8;
+    }
+
+    /* TOGGLE SWITCH FOR CERTIFICATE SELECTION */
+    .cert-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .cert-toggle-wrap.on {
+      border-color: #a855f7;
+      background: #f3e8ff;
+      color: #6b21a8;
+    }
+
+    .switch-dot {
+      width: 38px;
+      height: 22px;
+      background: #cbd5e1;
+      border-radius: 99px;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .switch-dot::after {
+      content: "";
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+    }
+
+    .cert-toggle-wrap.on .switch-dot {
+      background: #7e22ce;
+    }
+
+    .cert-toggle-wrap.on .switch-dot::after {
+      transform: translateX(16px);
+    }
+
+    /* FORMS */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .p-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: #fff;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.12);
+    }
+
+    .form-textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .tag-chip {
+      display: inline-block;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-family: monospace;
+      cursor: pointer;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+    .tag-chip:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    /* CERTIFICATE VISUAL PREVIEW (RESPONSIVE A4 LANDSCAPE) */
+    .cert-preview-shell {
+      background: #cbd5e1;
+      border-radius: 14px;
+      padding: 16px;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .cert-paper {
+      width: 840px;
+      min-width: 840px;
+      height: 594px;
+      background: #ffffff;
+      padding: 24px;
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.18);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      font-family: "Georgia", "Times New Roman", serif;
+      color: #1e293b;
+    }
+
+    .cert-outer-frame {
+      border: 9px solid var(--cert-primary, #15803d);
+      height: 100%;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cert-inner-frame {
+      border: 2px solid var(--cert-secondary, #ca8a04);
+      height: 100%;
+      padding: 28px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      position: relative;
+    }
+
+    .cert-org-header {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .cert-logo-img {
+      max-height: 54px;
+      max-width: 180px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+
+    .cert-org-name {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cert-primary, #15803d);
+    }
+
+    .cert-org-sub {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .cert-main-title {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #0f172a;
+      margin-top: 8px;
+    }
+
+    .cert-intro {
+      font-size: 16px;
+      font-style: italic;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    .cert-participant-name {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--cert-primary, #15803d);
+      border-bottom: 2px solid var(--cert-secondary, #ca8a04);
+      display: inline-block;
+      padding: 0 28px 6px;
+      margin: 8px auto 12px;
+    }
+
+    .cert-body-text {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #1e293b;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    .cert-city-date {
+      font-size: 14px;
+      color: #334155;
+      margin-top: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .cert-signatures {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      gap: 24px;
+      margin-top: 18px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .cert-sig-block {
+      width: 240px;
+      text-align: center;
+    }
+
+    .cert-sig-line {
+      border-top: 1.5px solid #334155;
+      padding-top: 6px;
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #0f172a;
+    }
+
+    .cert-sig-role {
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    .cert-footer-code {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 11px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 8px;
+      margin-top: 10px;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      padding: 22px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 92px;
+      right: 18px;
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 200;
+      display: none;
+    }
+    .toast.show {
+      display: block;
+    }
+
+    /* PUBLIC VIEWS (INSCRIÇÃO / CONFIRMAÇÃO / CERTIFICADO) */
+    .public-banner-bar {
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 16px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .public-reg-wrap {
+      max-width: 540px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .public-hero {
+      background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+      color: #fff;
+      padding: 26px 24px;
+      border-radius: 18px 18px 0 0;
+    }
+
+    .public-body {
+      background: #fff;
+      padding: 24px;
+      border-radius: 0 0 18px 18px;
+      border: 1px solid var(--border);
+      border-top: none;
+      box-shadow: var(--shadow);
+    }
+
+    @media print {
+      body {
+        background: #fff !important;
+        padding: 0 !important;
+      }
+      .no-print,
+      .topbar,
+      .desktop-nav,
+      .mobile-bottom-nav,
+      .public-banner-bar {
+        display: none !important;
+      }
+      .cert-preview-shell {
+        background: none !important;
+        padding: 0 !important;
+      }
+      .cert-paper {
+        box-shadow: none !important;
+        width: 100vw !important;
+        height: 100vh !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE RETORNO QUANDO O ORGANIZADOR ESTÁ TESTANDO UMA PÁGINA PÚBLICA -->
+  <div id="publicAdminBar" class="public-banner-bar no-print" style="display: none;">
+    <span>👁️ <strong>Modo Visualização do Participante:</strong> É assim que o inscrito vê esta página pelo link no WhatsApp.</span>
+    <button class="btn btn-sm btn-primary" onclick="voltarPainelOrganizador()">⬅ Voltar ao Painel do Organizador</button>
+  </div>
+
+  <!-- CABEÇALHO DO APP DO ORGANIZADOR -->
+  <header id="appHeader" class="topbar no-print">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <div class="brand-title">SimpliEventos ONG</div>
+          <div class="brand-sub">
+            <span>Gestão Gratuita até 400 Pessoas</span>
+            <span>•</span>
+            <span id="headerOrgName">Instituto Esperança Solidária</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <select id="eventSelector" class="event-select" onchange="trocarEventoAtivo(this.value)"></select>
+        <button class="btn btn-sm btn-outline" style="background:rgba(255,255,255,0.14);color:#fff;border-color:rgba(255,255,255,0.3);" onclick="abrirModalNovoEvento()">+ Novo Evento</button>
+        <button class="btn btn-sm btn-outline" style="background:#fff;color:#166534;border:none;" onclick="abrirPaginaPublicaInscricao()">🔗 Ver Página de Inscrição</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVEGAÇÃO DESKTOP -->
+  <nav id="desktopNav" class="desktop-nav no-print">
+    <div class="desktop-nav-inner">
+      <button class="nav-tab active" data-tab="painel" onclick="mudarAba('painel')">
+        📊 Painel & Link WhatsApp
+      </button>
+      <button class="nav-tab" data-tab="inscritos" onclick="mudarAba('inscritos')">
+        📲 Inscritos & Confirmação <span id="badgeTotalInscritos" class="tab-badge">0</span>
+      </button>
+      <button class="nav-tab" data-tab="pos_evento" onclick="mudarAba('pos_evento')">
+        ✅ Pós-Evento: Selecionar p/ Certificado <span id="badgeTotalCertificados" class="tab-badge">0</span>
+      </button>
+      <button class="nav-tab" data-tab="certificado" onclick="mudarAba('certificado')">
+        🎨 Montar Certificado Personalizado
+      </button>
+      <button class="nav-tab" data-tab="config" onclick="mudarAba('config')">
+        ⚙️ Configurar Evento (400 Vagas)
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAVEGAÇÃO INFERIOR MOBILE (ESTILO APP NATIVO NO CELULAR) -->
+  <nav id="mobileNav" class="mobile-bottom-nav no-print">
+    <button class="mob-nav-btn active" data-tab="painel" onclick="mudarAba('painel')">
+      <span class="icon">📊</span>
+      <span>Início</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="inscritos" onclick="mudarAba('inscritos')">
+      <span class="icon">📲</span>
+      <span>Inscritos</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="pos_evento" onclick="mudarAba('pos_evento')">
+      <span class="icon">✅</span>
+      <span>Pós-Evento</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="certificado" onclick="mudarAba('certificado')">
+      <span class="icon">🎓</span>
+      <span>Certificado</span>
+    </button>
+    <button class="mob-nav-btn" data-tab="config" onclick="mudarAba('config')">
+      <span class="icon">⚙️</span>
+      <span>Evento</span>
+    </button>
+  </nav>
+
+  <!-- CONTEÚDO PRINCIPAL DO ORGANIZADOR -->
+  <main id="organizerMain" class="main-container">
+
+    <!-- ====================================================================
+         ABA 1: PAINEL & LINK DE INSCRIÇÃO PELO WHATSAPP
+         ==================================================================== -->
+    <section id="tab-painel" class="tab-section">
+      <!-- CONEXÃO COM O BANCO DE DADOS GRATUITO DO GOOGLE DRIVE (PARA VERCEL) -->
+      <div class="card" style="border-left: 5px solid #0284c7; background: #f0f9ff; margin-bottom: 16px; padding: 14px 18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:14px; font-weight:800; color:#0369a1; display:flex; align-items:center; gap:6px;">
+              ☁️ Banco de Dados na Nuvem (Para funcionar na Vercel com 400 inscritos)
+              <span id="cloudStatusBadge" class="badge" style="background:#e0f2fe; color:#0369a1;">Verificando...</span>
+            </div>
+            <div style="font-size:12.5px; color:#0c4a6e; margin-top:2px;">
+              Cole abaixo a URL gerada no seu <strong>script.google.com</strong> (terminada em <code>/exec</code>) para salvar todos os inscritos no seu Google Drive:
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <input
+            id="googleScriptUrlInput"
+            type="url"
+            class="form-input"
+            style="flex:1; min-width:240px; background:#fff; border-color:#7dd3fc; font-size:13px;"
+            placeholder="https://script.google.com/macros/s/SEU_CODIGO_AQUI/exec"
+          />
+          <button class="btn btn-sm btn-primary" style="background:#0284c7;" onclick="conectarGoogleScriptUrl()">
+            🔗 Conectar Nuvem Google
+          </button>
+        </div>
+      </div>
+
+      <div class="share-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+          <div>
+            <span class="badge badge-confirmado" style="margin-bottom:6px;">🌟 EVENTO GRATUITO • INSTITUIÇÃO SEM FINS LUCRATIVOS</span>
+            <h2 id="dashEventName" style="font-size:20px;color:#14532d;font-weight:800;">Carregando evento...</h2>
+            <p id="dashEventMeta" style="font-size:13.5px;color:#166534;margin-top:3px;"></p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-whatsapp" onclick="compartilharConviteNoWhatsApp()">
+              📲 Enviar Link de Inscrição no WhatsApp
+            </button>
+            <button class="btn btn-outline" onclick="abrirPaginaPublicaInscricao()">
+              👁️ Abrir Formulário Público
+            </button>
+          </div>
+        </div>
+
+        <div class="share-url-row">
+          <input id="publicRegistrationUrlInput" type="text" class="share-url-input" readonly onclick="this.select()" />
+          <button class="btn btn-primary" onclick="copiarLinkInscricao()">📋 Copiar Link de Inscrição</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>TOTAL DE INSCRITOS</span>
+            <span>👥</span>
+          </div>
+          <div class="kpi-value" id="kpiInscritos">0 / 400</div>
+          <div class="progress-bar">
+            <div id="kpiProgressBar" class="progress-fill" style="width: 0%;"></div>
+          </div>
+          <div class="kpi-foot" id="kpiVagasRestantes" style="margin-top:6px;">400 vagas gratuitas restantes</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>CONFIRMADOS NO WHATSAPP</span>
+            <span>✅</span>
+          </div>
+          <div class="kpi-value" id="kpiConfirmados" style="color:#15803d;">0</div>
+          <div class="kpi-foot" id="kpiPendentes">0 aguardando confirmação</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>SELECIONADOS P/ CERTIFICADO</span>
+            <span>🎓</span>
+          </div>
+          <div class="kpi-value" id="kpiCertificados" style="color:#7e22ce;">0</div>
+          <div class="kpi-foot">Liberados pós-evento com link PDF</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>CARGA HORÁRIA DO EVENTO</span>
+            <span>⏱️</span>
+          </div>
+          <div class="kpi-value" id="kpiCargaHoraria" style="font-size:24px;">4 horas</div>
+          <div class="kpi-foot">Impressa automaticamente no PDF</div>
+        </div>
+      </div>
+
+      <!-- FLUXO RÁPIDO EM 4 PASSOS (ESTILO DOITY SIMPLIFICADO) -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🚀 Fluxo Rápido do Evento (Pelo Celular ou Computador)</div>
+            <div class="card-subtitle">Toque em qualquer etapa abaixo para gerenciar seu evento facilmente</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div style="border:1px solid var(--border);border-radius:12px;padding:15px;background:#f8fafc;">
+            <div style="font-weight:800;color:#15803d;font-size:14px;">PASSO 1 • Divulgar Link no WhatsApp</div>
+            <p style="font-size:13px;color:var(--text-muted);margin:6px 0 12px;">
+              Envie o link público nos grupos. O inscrito preenche Nome Completo, E-mail e Telefone em 15 segundos.
+            </p>
+            <button class="btn btn-sm btn-outline" onclick="abrirPaginaPublicaInscricao()">Testar Página de Inscrição ➔</button>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:12px;padding:15px;background:#f8fafc;">
+            <div style="font-weight:800;color:#15803d;font-size:14px;">PASSO 2 • Pedir Confirmação no WhatsApp</div>
+            <p style="font-size:13px;color:var(--text-muted);margin:6px 0 12px;">
+              Envie a mensagem com 1 clique pelo botão <strong>📲 Pedir Confirmação</strong>. O participante confirma pelo link.
+            </p>
+            <button class="btn btn-sm btn-primary" onclick="mudarAba('inscritos')">Gerenciar Confirmações ➔</button>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:12px;padding:15px;background:#f8fafc;">
+            <div style="font-weight:800;color:#7e22ce;font-size:14px;">PASSO 3 • Selecionar Quem Vai Receber Certificado</div>
+            <p style="font-size:13px;color:var(--text-muted);margin:6px 0 12px;">
+              Após o evento, marque na lista apenas os participantes que compareceram para liberar o certificado deles.
+            </p>
+            <button class="btn btn-sm btn-purple" onclick="mudarAba('pos_evento')">Selecionar Participantes ➔</button>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:12px;padding:15px;background:#f8fafc;">
+            <div style="font-weight:800;color:#ca8a04;font-size:14px;">PASSO 4 • Montar Certificado e Enviar Link PDF</div>
+            <p style="font-size:13px;color:var(--text-muted);margin:6px 0 12px;">
+              Personalize cores, textos e assinaturas do certificado e envie o link individual de download em PDF.
+            </p>
+            <button class="btn btn-sm btn-outline" onclick="mudarAba('certificado')">Personalizar Certificado ➔</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ABA 2: INSCRITOS & PEDIDO DE CONFIRMAÇÃO NO WHATSAPP
+         ==================================================================== -->
+    <section id="tab-inscritos" class="tab-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">📲 Lista de Inscritos & Confirmação pelo WhatsApp</div>
+            <div class="card-subtitle">
+              Toque em <strong>"📲 Pedir Confirmação"</strong> para abrir o WhatsApp com a mensagem e o link de confirmação 1-clique.
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-sm btn-primary" onclick="abrirModalNovoInscrito()">+ Adicionar Inscrito</button>
+            <button class="btn btn-sm btn-outline" onclick="exportarCSV()">📥 Exportar Planilha (CSV)</button>
+          </div>
+        </div>
+
+        <div class="toolbar-row">
+          <input
+            id="searchInscritos"
+            type="text"
+            class="search-input"
+            placeholder="🔍 Buscar por nome, telefone ou e-mail..."
+            oninput="renderizarInscritos()"
+          />
+          <div class="pill-group">
+            <button class="pill-btn active" data-filter="TODOS" onclick="setFiltroInscritos('TODOS')">Todos</button>
+            <button class="pill-btn" data-filter="Pendente" onclick="setFiltroInscritos('Pendente')">⏳ Pendentes</button>
+            <button class="pill-btn" data-filter="Confirmado" onclick="setFiltroInscritos('Confirmado')">✅ Confirmados</button>
+            <button class="pill-btn" data-filter="Cancelado" onclick="setFiltroInscritos('Cancelado')">❌ Cancelados</button>
+          </div>
+        </div>
+
+        <div id="listaInscritosContainer" class="participant-list"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ABA 3: PÓS-EVENTO — SELECIONAR PARTICIPANTES P/ RECEBER CERTIFICADO
+         ==================================================================== -->
+    <section id="tab-pos_evento" class="tab-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">✅ Pós-Evento: Selecionar Participantes para Receber Certificado</div>
+            <div class="card-subtitle">
+              Ative a chave <strong>"Receber Certificado"</strong> nos participantes que estiveram presentes. O link individual em PDF é liberado na hora!
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-sm btn-purple" onclick="acaoEmLoteCertificado('marcar_confirmados')">
+              ☑️ Selecionar Todos os Confirmados
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="acaoEmLoteCertificado('marcar_todos')">
+              Selecionar Todos
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="acaoEmLoteCertificado('desmarcar_todos')">
+              Limpar Seleção
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-row">
+          <input
+            id="searchPosEvento"
+            type="text"
+            class="search-input"
+            placeholder="🔍 Buscar participante para liberar ou enviar certificado..."
+            oninput="renderizarPosEvento()"
+          />
+          <div class="pill-group">
+            <button class="pill-btn active" data-certfilter="TODOS" onclick="setFiltroCert('TODOS')">Todos</button>
+            <button class="pill-btn" data-certfilter="SIM" onclick="setFiltroCert('SIM')">🎓 Selecionados (SIM)</button>
+            <button class="pill-btn" data-certfilter="NAO" onclick="setFiltroCert('NAO')">⏳ Não Selecionados</button>
+          </div>
+        </div>
+
+        <div id="listaPosEventoContainer" class="participant-list"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ABA 4: MONTAR CERTIFICADO PERSONALIZADO (EDITOR VISUAL)
+         ==================================================================== -->
+    <section id="tab-certificado" class="tab-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🎨 Montar Certificado Personalizado da Instituição</div>
+            <div class="card-subtitle">
+              Personalize cores, textos, logo e assinaturas. Todos os participantes selecionados receberão o certificado com este modelo.
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="salvarConfigCertificado()">💾 Salvar Certificado</button>
+            <button class="btn btn-purple" onclick="baixarPdfExemplo()">📥 Baixar PDF de Teste Agora</button>
+          </div>
+        </div>
+
+        <!-- TEMAS RÁPIDOS -->
+        <div style="margin-bottom:16px;">
+          <div class="form-label" style="margin-bottom:8px;">Escolha um Estilo de Certificado (ou personalize as cores abaixo):</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-sm btn-outline" onclick="aplicarTemaCertificado('#15803d', '#ca8a04')">🌿 Clássico ONG (Verde & Ouro)</button>
+            <button class="btn btn-sm btn-outline" onclick="aplicarTemaCertificado('#1e3a8a', '#d97706')">🏛️ Institucional Azul & Dourado</button>
+            <button class="btn btn-sm btn-outline" onclick="aplicarTemaCertificado('#6b21a8', '#ca8a04')">✨ Impacto Social (Roxo & Ouro)</button>
+            <button class="btn btn-sm btn-outline" onclick="aplicarTemaCertificado('#881337', '#b45309')">📜 Solene Bordô & Bronze</button>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-bottom:18px;">
+          <div class="form-group">
+            <label class="form-label">Cor Principal (Moldura e Nome)</label>
+            <input id="certCorPrimaria" type="color" class="form-input" style="height:42px;padding:4px;" value="#15803d" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Cor Secundária (Filete Dourado / Detalhes)</label>
+            <input id="certCorSecundaria" type="color" class="form-input" style="height:42px;padding:4px;" value="#ca8a04" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Título do Certificado</label>
+            <input id="certTitulo" type="text" class="form-input" value="CERTIFICADO DE PARTICIPAÇÃO" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Frase de Abertura (Subtítulo)</label>
+            <input id="certSubtitulo" type="text" class="form-input" value="Certificamos para os devidos fins que" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label">Texto Principal do Certificado (Toque nas variáveis para inserir)</label>
+            <textarea id="certTextoCorpo" class="form-textarea" oninput="atualizarPreviewCertificado()"></textarea>
+            <div>
+              <span class="tag-chip" onclick="inserirTagCert('{EVENTO}')">+ {EVENTO}</span>
+              <span class="tag-chip" onclick="inserirTagCert('{INSTITUICAO}')">+ {INSTITUICAO}</span>
+              <span class="tag-chip" onclick="inserirTagCert('{DATA}')">+ {DATA}</span>
+              <span class="tag-chip" onclick="inserirTagCert('{CARGA_HORARIA}')">+ {CARGA_HORARIA}</span>
+              <span class="tag-chip" onclick="inserirTagCert('{LOCAL}')">+ {LOCAL}</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Cidade e Data de Emissão</label>
+            <input id="certCidadeData" type="text" class="form-input" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Logo da Instituição (Opcional - Imagem)</label>
+            <input id="certLogoUpload" type="file" accept="image/*" class="form-input" onchange="carregarLogoCertificado(this)" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">1ª Assinatura — Nome do Responsável</label>
+            <input id="certAss1Nome" type="text" class="form-input" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">1ª Assinatura — Cargo / Instituição</label>
+            <input id="certAss1Cargo" type="text" class="form-input" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">2ª Assinatura — Nome (Deixe em branco para apenas 1 assinatura)</label>
+            <input id="certAss2Nome" type="text" class="form-input" oninput="atualizarPreviewCertificado()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">2ª Assinatura — Cargo / Função</label>
+            <input id="certAss2Cargo" type="text" class="form-input" oninput="atualizarPreviewCertificado()" />
+          </div>
+        </div>
+
+        <!-- LIVE PREVIEW DO CERTIFICADO -->
+        <div class="form-label" style="margin-bottom:8px;">👁️ Pré-visualização em Tempo Real do Certificado:</div>
+        <div class="cert-preview-shell">
+          <div id="liveCertPaper" class="cert-paper">
+            <div class="cert-outer-frame">
+              <div class="cert-inner-frame">
+                <div class="cert-org-header">
+                  <img id="previewCertLogo" class="cert-logo-img" style="display:none;" alt="Logo" />
+                  <div id="previewOrgName" class="cert-org-name">INSTITUTO ESPERANÇA SOLIDÁRIA</div>
+                  <div id="previewOrgSub" class="cert-org-sub">Instituição Sem Fins Lucrativos</div>
+                  <div id="previewCertTitle" class="cert-main-title">CERTIFICADO DE PARTICIPAÇÃO</div>
+                  <div id="previewCertSubtitle" class="cert-intro">Certificamos para os devidos fins que</div>
+                </div>
+
+                <div>
+                  <div id="previewParticipantName" class="cert-participant-name">Ana Clara Mendes da Silva</div>
+                  <p id="previewCertBody" class="cert-body-text"></p>
+                </div>
+
+                <div>
+                  <div id="previewCityDate" class="cert-city-date">Foz do Iguaçu - PR, 26 de novembro de 2026</div>
+                  <div class="cert-signatures">
+                    <div class="cert-sig-block">
+                      <div id="previewSig1Name" class="cert-sig-line">Maria Helena Souza</div>
+                      <div id="previewSig1Role" class="cert-sig-role">Presidente</div>
+                    </div>
+                    <div id="previewSig2Block" class="cert-sig-block">
+                      <div id="previewSig2Name" class="cert-sig-line">Carlos Eduardo Ribeiro</div>
+                      <div id="previewSig2Role" class="cert-sig-role">Coordenador</div>
+                    </div>
+                  </div>
+                  <div class="cert-footer-code">
+                    <span>Documento Oficial • Instituição Sem Fins Lucrativos</span>
+                    <span>Código de Validação: <strong>CERT-2026-0001</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ABA 5: CONFIGURAÇÕES DO EVENTO E MENSAGENS DE WHATSAPP
+         ==================================================================== -->
+    <section id="tab-config" class="tab-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">⚙️ Configurações do Evento e Textos de WhatsApp</div>
+            <div class="card-subtitle">Configure os dados do evento gratuito (até 400 vagas) e personalize os textos enviados pelo WhatsApp.</div>
+          </div>
+          <button class="btn btn-primary" onclick="salvarConfigEvento()">💾 Salvar Alterações</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Nome do Evento</label>
+            <input id="cfgNomeEvento" type="text" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nome da Instituição Sem Fins Lucrativos (ONG)</label>
+            <input id="cfgInstituicao" type="text" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Subtítulo / CNPJ da Instituição</label>
+            <input id="cfgSubtituloOrg" type="text" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Limite Gratuito de Vagas (Máx. 400 pessoas)</label>
+            <input id="cfgLimiteVagas" type="number" min="1" max="400" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Data do Evento</label>
+            <input id="cfgData" type="text" class="form-input" placeholder="Ex: 25/11/2026" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Horário</label>
+            <input id="cfgHorario" type="text" class="form-input" placeholder="Ex: 14h00 às 18h00" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Local ou Link de Transmissão</label>
+            <input id="cfgLocal" type="text" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Carga Horária (Para o Certificado)</label>
+            <input id="cfgCargaHoraria" type="text" class="form-input" placeholder="Ex: 4 horas" />
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label">Descrição do Evento (Exibida na Página Pública de Inscrição)</label>
+            <textarea id="cfgDescricao" class="form-textarea"></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label">📲 Modelo de Mensagem de Confirmação no WhatsApp</label>
+            <textarea id="cfgMsgConfirmacao" class="form-textarea"></textarea>
+            <span style="font-size:12px;color:var(--text-muted);">
+              Variáveis automáticas: <code>{NOME}</code>, <code>{EVENTO}</code>, <code>{DATA}</code>, <code>{HORARIO}</code>, <code>{LOCAL}</code>, <code>{LINK_CONFIRMACAO}</code>
+            </span>
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label">🎓 Modelo de Mensagem de Entrega do Certificado no WhatsApp</label>
+            <textarea id="cfgMsgCertificado" class="form-textarea"></textarea>
+            <span style="font-size:12px;color:var(--text-muted);">
+              Variáveis automáticas: <code>{NOME}</code>, <code>{EVENTO}</code>, <code>{INSTITUICAO}</code>, <code>{CARGA_HORARIA}</code>, <code>{LINK_CERTIFICADO}</code>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       TELAS PÚBLICAS DO PARTICIPANTE (INSCRIÇÃO / CONFIRMAÇÃO / CERTIFICADO)
+       ====================================================================== -->
+  <div id="publicContainer" style="display: none;"></div>
+
+  <!-- MODAL: ADICIONAR INSCRITO MANUALMENTE -->
+  <div id="modalNovoInscrito" class="modal-backdrop no-print">
+    <div class="modal-box">
+      <h3 style="font-size:18px;margin-bottom:6px;">➕ Cadastrar Participante</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">
+        Adicione um inscrito manualmente (ou compartilhe o link público para eles mesmos se inscreverem pelo WhatsApp).
+      </p>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome Completo *</label>
+          <input id="modNome" type="text" class="form-input" placeholder="Ex: João Carlos da Silva" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">E-mail *</label>
+          <input id="modEmail" type="email" class="form-input" placeholder="Ex: joao@email.com" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Telefone / WhatsApp com DDD *</label>
+          <input id="modTelefone" type="tel" class="form-input" placeholder="(45) 99999-9999" oninput="mascaraTelefone(this)" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status Inicial</label>
+          <select id="modStatus" class="form-select">
+            <option value="Pendente">Pendente</option>
+            <option value="Confirmado">Confirmado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Liberar Certificado?</label>
+          <select id="modCert" class="form-select">
+            <option value="false">Ainda não (Pós-evento)</option>
+            <option value="true">SIM (Liberado)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px;">
+        <button class="btn btn-outline" onclick="fecharModal('modalNovoInscrito')">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarNovoInscritoManual()">Salvar Inscrito</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CRIAR NOVO EVENTO -->
+  <div id="modalNovoEvento" class="modal-backdrop no-print">
+    <div class="modal-box">
+      <h3 style="font-size:18px;margin-bottom:6px;">✨ Criar Novo Evento Gratuito (Até 400 Pessoas)</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">
+        Crie um novo evento para gerar um link exclusivo de inscrição pelo WhatsApp e certificado próprio.
+      </p>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome do Evento *</label>
+          <input id="newEvtNome" type="text" class="form-input" placeholder="Ex: Workshop de Voluntariado e Gestão Social" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Nome da Instituição Sem Fins Lucrativos *</label>
+          <input id="newEvtInst" type="text" class="form-input" placeholder="Ex: Instituto Esperança Solidária" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data do Evento</label>
+          <input id="newEvtData" type="text" class="form-input" placeholder="Ex: 12/12/2026" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Horário</label>
+          <input id="newEvtHorario" type="text" class="form-input" placeholder="Ex: 19h00 às 21h30" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Carga Horária</label>
+          <input id="newEvtCarga" type="text" class="form-input" value="4 horas" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Limite de Vagas (Máx 400)</label>
+          <input id="newEvtVagas" type="number" max="400" min="1" class="form-input" value="400" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Local / Endereço</label>
+          <input id="newEvtLocal" type="text" class="form-input" placeholder="Ex: Auditório da Instituição" />
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px;">
+        <button class="btn btn-outline" onclick="fecharModal('modalNovoEvento')">Cancelar</button>
+        <button class="btn btn-primary" onclick="criarNovoEvento()">Criar Evento</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast no-print"></div>
+
+  <script>
+    
+    // ========================================================================
+    // MODO HÍBRIDO: FUNCIONA NO SERVIDOR E TAMBÉM COMO ARQUIVO .HTML BAIXADO (SEM INSTALAR NADA!)
+    // ========================================================================
+    const STORAGE_KEY = "simplieventos_ong_db_v1";
+
+    // ========================================================================
+    // CONECTOR DIRETO VERCEL <-> GOOGLE DRIVE (SEM PRECISAR DE PASTAS NO GITHUB)
+    // ========================================================================
+    const GAS_URL_KEY = "simplieventos_gas_url_v1";
+
+    function getGoogleScriptUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const dbParam = params.get("db");
+      if (dbParam) {
+        const fullUrl = dbParam.startsWith("http")
+          ? dbParam
+          : "https://script.google.com/macros/s/" + dbParam + "/exec";
+        try { localStorage.setItem(GAS_URL_KEY, fullUrl); } catch (e) {}
+        return fullUrl;
+      }
+      try {
+        return localStorage.getItem(GAS_URL_KEY) || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function getGoogleScriptShortId() {
+      const url = getGoogleScriptUrl();
+      const match = url.match(/\/macros\/s\/([^/]+)\/exec/);
+      return match ? match[1] : url;
+    }
+
+    async function conectarGoogleScriptUrl() {
+      const inp = document.getElementById("googleScriptUrlInput");
+      const val = (inp ? inp.value : "").trim();
+      if (!val) {
+        localStorage.removeItem(GAS_URL_KEY);
+        atualizarBadgeCloud();
+        mostrarToast("Modo local ativado.");
+        return;
+      }
+      if (!val.includes("script.google.com/macros/s/")) {
+        mostrarToast("⚠️ Cole a URL do App da Web que começa com https://script.google.com/macros/s/...");
+        return;
+      }
+      localStorage.setItem(GAS_URL_KEY, val);
+      mostrarToast("⏳ Conectando ao seu Google Drive...");
+      await carregarEstado();
+      atualizarBadgeCloud();
+      mostrarToast("✅ Conectado ao seu Google Drive com sucesso!");
+    }
+
+    function atualizarBadgeCloud() {
+      const badge = document.getElementById("cloudStatusBadge");
+      const inp = document.getElementById("googleScriptUrlInput");
+      const gasUrl = getGoogleScriptUrl();
+      if (inp && gasUrl) inp.value = gasUrl;
+      if (!badge) return;
+      if (gasUrl) {
+        badge.textContent = "✅ Conectado ao Google Drive";
+        badge.style.background = "#dcfce7";
+        badge.style.color = "#166534";
+      } else if (isServerMode) {
+        badge.textContent = "✅ Servidor Ativo";
+        badge.style.background = "#dcfce7";
+        badge.style.color = "#166534";
+      } else {
+        badge.textContent = "⚠️ Cole a URL do Google Script abaixo";
+        badge.style.background = "#fef3c7";
+        badge.style.color = "#92400e";
+      }
+    }
+
+    let isServerMode = false;
+
+    const initialSeed = {
+      activeEventId: "evt-impacto-2026",
+      events: [
+        {
+          id: "evt-impacto-2026",
+          slug: "encontro-impacto-social-2026",
+          nome: "1º Encontro Anual de Impacto Social e Cidadania",
+          instituicao: "Instituto Esperança Solidária",
+          cnpjOuSubtitulo: "Instituição Sem Fins Lucrativos • Utilidade Pública",
+          data: "25/11/2026",
+          horario: "14h00 às 18h00",
+          local: "Auditório Comunitário Central - Foz do Iguaçu / PR",
+          cargaHoraria: "4 horas",
+          limiteVagas: 400,
+          descricao: "Evento gratuito voltado à capacitação de voluntários, gestores sociais e comunidade sobre projetos de impacto comunitário, captação de recursos e inclusão social.",
+          msgConfirmacao: "Olá, {NOME}! 👋 Recebemos sua inscrição gratuita para o evento *{EVENTO}* ({DATA}, das {HORARIO}).\n\n📍 Local: {LOCAL}\n\nPor favor, confirme sua presença clicando no seu link exclusivo abaixo (ou responda *CONFIRMO* nesta mensagem):\n{LINK_CONFIRMACAO}",
+          msgCertificado: "Parabéns pela sua participação, {NOME}! 🎓✨\n\nSeu certificado de *{CARGA_HORARIA}* do evento *{EVENTO}* promovido por *{INSTITUICAO}* já está liberado.\n\n📄 Acesse, visualize e baixe seu PDF pelo seu link exclusivo:\n{LINK_CERTIFICADO}",
+          certificadoConfig: {
+            tema: "verde_ong",
+            corPrimaria: "#15803d",
+            corSecundaria: "#ca8a04",
+            titulo: "CERTIFICADO DE PARTICIPAÇÃO",
+            subtitulo: "Certificamos para os devidos fins que",
+            textoCorpo: "participou com êxito do evento \"{EVENTO}\", promovido por {INSTITUICAO}, realizado em {DATA}, cumprindo carga horária total de {CARGA_HORARIA}.",
+            cidadeData: "Foz do Iguaçu - PR, 26 de novembro de 2026",
+            assinatura1Nome: "Maria Helena Souza",
+            assinatura1Cargo: "Presidente • Instituto Esperança Solidária",
+            assinatura2Nome: "Carlos Eduardo Ribeiro",
+            assinatura2Cargo: "Coordenador de Projetos Sociais",
+            logoDataUrl: "",
+            assinaturaDataUrl: ""
+          }
+        }
+      ],
+      participants: [
+        { id: "p-001", eventId: "evt-impacto-2026", nome: "Ana Clara Mendes da Silva", email: "anaclara.mendes@email.org.br", telefone: "(45) 99912-3456", status: "Confirmado", receberCertificado: true, codigoCertificado: "CERT-2026-0001", tokenConfirmacao: "tok-0001-ana", criadoEm: "16/10/2026 09:12" },
+        { id: "p-002", eventId: "evt-impacto-2026", nome: "Bruno Henrique Oliveira", email: "bruno.oliveira@email.org.br", telefone: "(45) 99876-5432", status: "Confirmado", receberCertificado: true, codigoCertificado: "CERT-2026-0002", tokenConfirmacao: "tok-0002-bruno", criadoEm: "16/10/2026 09:18" },
+        { id: "p-003", eventId: "evt-impacto-2026", nome: "Carla Fernanda Santos", email: "carla.santos@email.org.br", telefone: "(45) 99765-4321", status: "Pendente", receberCertificado: false, codigoCertificado: "CERT-2026-0003", tokenConfirmacao: "tok-0003-carla", criadoEm: "16/10/2026 09:25" },
+        { id: "p-004", eventId: "evt-impacto-2026", nome: "Diego Rafael Costa", email: "diego.costa@email.org.br", telefone: "(45) 99111-2233", status: "Confirmado", receberCertificado: true, codigoCertificado: "CERT-2026-0004", tokenConfirmacao: "tok-0004-diego", criadoEm: "16/10/2026 10:02" },
+        { id: "p-005", eventId: "evt-impacto-2026", nome: "Eduarda Lima Pereira", email: "eduarda.lima@email.org.br", telefone: "(45) 98877-6655", status: "Pendente", receberCertificado: false, codigoCertificado: "CERT-2026-0005", tokenConfirmacao: "tok-0005-eduarda", criadoEm: "16/10/2026 10:15" },
+        { id: "p-006", eventId: "evt-impacto-2026", nome: "Felipe Augusto Almeida", email: "felipe.almeida@email.org.br", telefone: "(45) 99333-4455", status: "Confirmado", receberCertificado: true, codigoCertificado: "CERT-2026-0006", tokenConfirmacao: "tok-0006-felipe", criadoEm: "16/10/2026 10:40" },
+        { id: "p-007", eventId: "evt-impacto-2026", nome: "Gabriela Rocha Rodrigues", email: "gabriela.rocha@email.org.br", telefone: "(45) 99444-5566", status: "Cancelado", receberCertificado: false, codigoCertificado: "CERT-2026-0007", tokenConfirmacao: "tok-0007-gabriela", criadoEm: "16/10/2026 11:05" },
+        { id: "p-008", eventId: "evt-impacto-2026", nome: "Henrique Martins Gomes", email: "henrique.gomes@email.org.br", telefone: "(45) 99555-6677", status: "Confirmado", receberCertificado: true, codigoCertificado: "CERT-2026-0008", tokenConfirmacao: "tok-0008-henrique", criadoEm: "16/10/2026 11:22" }
+      ]
+    };
+
+    function salvarLocal() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function carregarLocal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(initialSeed));
+    }
+
+    let state = {
+      activeEventId: "evt-impacto-2026",
+      events: [],
+      participants: []
+    };
+
+    let filtroInscritosAtual = "TODOS";
+    let filtroCertAtual = "TODOS";
+    let logoTempDataUrl = "";
+
+    function mostrarToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+    }
+
+    function getActiveEvent() {
+      return state.events.find(e => e.id === state.activeEventId) || state.events[0] || {};
+    }
+
+    function getEventParticipants(eventId) {
+      const id = eventId || getActiveEvent().id;
+      return state.participants.filter(p => p.eventId === id);
+    }
+
+    function limparTelefoneWhatsApp(fone) {
+      const digitos = String(fone || "").replace(/\D/g, "");
+      if (!digitos) return "";
+      return digitos.startsWith("55") ? digitos : "55" + digitos;
+    }
+
+    function mascaraTelefone(input) {
+      let v = input.value.replace(/\D/g, "");
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 6) {
+        input.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+      } else if (v.length > 2) {
+        input.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+      } else if (v.length > 0) {
+        input.value = `(${v}`;
+      }
+    }
+
+    function getBaseUrl() {
+      if (window.__WEBAPP_URL__) return window.__WEBAPP_URL__;
+      return window.location.origin + window.location.pathname;
+    }
+
+    function getDbQuerySuffix() {
+      const id = getGoogleScriptShortId();
+      return id ? `&db=${encodeURIComponent(id)}` : "";
+    }
+
+    function getLinkPublicoInscricao(eventId) {
+      const id = eventId || getActiveEvent().id;
+      return `${getBaseUrl()}?view=inscricao&evento=${encodeURIComponent(id)}${getDbQuerySuffix()}`;
+    }
+
+    function getLinkConfirmacaoParticipante(p) {
+      return `${getBaseUrl()}?view=confirmar&token=${encodeURIComponent(p.tokenConfirmacao || p.id)}${getDbQuerySuffix()}`;
+    }
+
+    function getLinkCertificadoParticipante(p) {
+      return `${getBaseUrl()}?view=certificado&codigo=${encodeURIComponent(p.codigoCertificado)}${getDbQuerySuffix()}`;
+    }
+
+    function montarUrlWhatsAppConfirmacao(p) {
+      const ev = getActiveEvent();
+      const fone = limparTelefoneWhatsApp(p.telefone);
+      const linkConf = getLinkConfirmacaoParticipante(p);
+      const template =
+        ev.msgConfirmacao ||
+        "Olá, {NOME}! 👋 Recebemos sua inscrição gratuita para o evento *{EVENTO}* ({DATA}, das {HORARIO}).\n\nPor favor, confirme sua presença clicando no link abaixo:\n{LINK_CONFIRMACAO}";
+      const msg = template
+        .replace(/\{NOME\}/g, p.nome)
+        .replace(/\{EVENTO\}/g, ev.nome || "")
+        .replace(/\{INSTITUICAO\}/g, ev.instituicao || "")
+        .replace(/\{DATA\}/g, ev.data || "")
+        .replace(/\{HORARIO\}/g, ev.horario || "")
+        .replace(/\{LOCAL\}/g, ev.local || "")
+        .replace(/\{LINK_CONFIRMACAO\}/g, linkConf);
+      return `https://wa.me/${fone}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function montarUrlWhatsAppCertificado(p) {
+      const ev = getActiveEvent();
+      const fone = limparTelefoneWhatsApp(p.telefone);
+      const linkCert = getLinkCertificadoParticipante(p);
+      const template =
+        ev.msgCertificado ||
+        "Parabéns pela sua participação, {NOME}! 🎓✨\n\nSeu certificado de *{CARGA_HORARIA}* do evento *{EVENTO}* já está disponível.\n\n📄 Acesse e baixe em PDF pelo seu link exclusivo:\n{LINK_CERTIFICADO}";
+      const msg = template
+        .replace(/\{NOME\}/g, p.nome)
+        .replace(/\{EVENTO\}/g, ev.nome || "")
+        .replace(/\{INSTITUICAO\}/g, ev.instituicao || "")
+        .replace(/\{DATA\}/g, ev.data || "")
+        .replace(/\{CARGA_HORARIA\}/g, ev.cargaHoraria || "")
+        .replace(/\{LINK_CERTIFICADO\}/g, linkCert);
+      return `https://wa.me/${fone}?text=${encodeURIComponent(msg)}`;
+    }
+
+    // ========================================================================
+    // CARREGAMENTO DO SERVIDOR
+    // ========================================================================
+
+    // Interceptador automático para funcionar 100% offline/local quando aberto como arquivo .html baixado
+    const _nativeFetch = window.fetch.bind(window);
+    window.fetch = async function(input, init = {}) {
+      const urlStr = typeof input === "string" ? input : input.url;
+      const remoteGasUrl = getGoogleScriptUrl();
+      if (remoteGasUrl && urlStr.startsWith("/api/")) {
+        try {
+          const method = (init.method || "GET").toUpperCase();
+          const body = init.body ? JSON.parse(init.body) : {};
+          const gRes = await _nativeFetch(remoteGasUrl, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ urlStr, method, body }),
+            redirect: "follow"
+          });
+          const gJson = await gRes.json();
+          if (gJson && gJson.data) {
+            if (gJson.data.db) state = gJson.data.db;
+            else if (gJson.data.events) state = gJson.data;
+            salvarLocal();
+          }
+          return {
+            ok: (gJson.status || 200) >= 200 && (gJson.status || 200) < 300,
+            status: gJson.status || 200,
+            json: async () => gJson.data
+          };
+        } catch (err) {
+          console.warn("Erro ao chamar Google Script remoto, usando fallback:", err);
+        }
+      }
+      if (window.google && google.script && google.script.run && urlStr.startsWith("/api/")) {
+        return new Promise((resolve) => {
+          const method = (init.method || "GET").toUpperCase();
+          const body = init.body ? JSON.parse(init.body) : {};
+          google.script.run
+            .withSuccessHandler((resObj) => {
+              resolve({
+                ok: resObj.status >= 200 && resObj.status < 300,
+                status: resObj.status,
+                json: async () => resObj.data
+              });
+            })
+            .withFailureHandler((err) => {
+              resolve({
+                ok: false,
+                status: 500,
+                json: async () => ({ error: err.message || "Erro na nuvem Google" })
+              });
+            })
+            .apiRouter(urlStr, method, body);
+        });
+      }
+      if (isServerMode && window.location.protocol.startsWith("http")) {
+        try {
+          return await _nativeFetch(input, init);
+        } catch (err) {
+          console.warn("Fallback para banco local:", err);
+        }
+      }
+      if (!urlStr.startsWith("/api/")) {
+        return _nativeFetch(input, init);
+      }
+
+      const method = (init.method || "GET").toUpperCase();
+      const body = init.body ? JSON.parse(init.body) : {};
+      const makeResp = (status, obj) => ({
+        ok: status >= 200 && status < 300,
+        status,
+        json: async () => obj
+      });
+
+      if (urlStr === "/api/state" && method === "GET") {
+        return makeResp(200, state);
+      }
+
+      if (urlStr === "/api/events" && method === "POST") {
+        if (body.id) {
+          const idx = state.events.findIndex(e => e.id === body.id);
+          if (idx !== -1) {
+            state.events[idx] = { ...state.events[idx], ...body };
+            state.activeEventId = state.events[idx].id;
+            salvarLocal();
+            return makeResp(200, { ok: true, event: state.events[idx], db: state });
+          }
+        }
+        const newId = "evt-" + Math.random().toString(36).slice(2, 8);
+        const newEvent = {
+          id: newId,
+          slug: (body.nome || "evento").toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          nome: body.nome || "Novo Evento Social",
+          instituicao: body.instituicao || "Instituição Sem Fins Lucrativos",
+          cnpjOuSubtitulo: body.cnpjOuSubtitulo || "Instituição Sem Fins Lucrativos",
+          data: body.data || "30/11/2026",
+          horario: body.horario || "14h00 às 18h00",
+          local: body.local || "Auditório Principal",
+          cargaHoraria: body.cargaHoraria || "4 horas",
+          limiteVagas: Math.min(400, Math.max(1, Number(body.limiteVagas) || 400)),
+          descricao: body.descricao || "Evento gratuito promovido pela nossa instituição.",
+          msgConfirmacao: state.events[0]?.msgConfirmacao || "",
+          msgCertificado: state.events[0]?.msgCertificado || "",
+          certificadoConfig: { ...(state.events[0]?.certificadoConfig || {}) }
+        };
+        state.events.push(newEvent);
+        state.activeEventId = newId;
+        salvarLocal();
+        return makeResp(201, { ok: true, event: newEvent, db: state });
+      }
+
+      if (urlStr === "/api/active-event" && method === "POST") {
+        state.activeEventId = body.eventId;
+        salvarLocal();
+        return makeResp(200, { ok: true, db: state });
+      }
+
+      if (urlStr === "/api/participants" && method === "POST") {
+        const eventId = body.eventId || state.activeEventId;
+        const ev = state.events.find(e => e.id === eventId) || state.events[0];
+        const ativos = state.participants.filter(p => p.eventId === ev.id && p.status !== "Cancelado");
+        if (ativos.length >= (Number(ev.limiteVagas) || 400)) {
+          return makeResp(400, { error: "Limite de 400 vagas atingido." });
+        }
+        const seq = state.participants.filter(p => p.eventId === ev.id).length + 1;
+        const now = new Date();
+        const dtStr = now.toLocaleDateString("pt-BR") + " " + now.toTimeString().slice(0, 5);
+        const newP = {
+          id: "p-" + Math.random().toString(36).slice(2, 8),
+          eventId: ev.id,
+          nome: body.nome,
+          email: body.email,
+          telefone: body.telefone,
+          status: body.status || "Pendente",
+          receberCertificado: Boolean(body.receberCertificado),
+          codigoCertificado: "CERT-2026-" + String(seq).padStart(4, "0"),
+          tokenConfirmacao: "tok-" + String(seq).padStart(4, "0") + "-" + Math.random().toString(36).slice(2, 6),
+          criadoEm: dtStr
+        };
+        state.participants.unshift(newP);
+        salvarLocal();
+        return makeResp(201, { ok: true, participant: newP, db: state });
+      }
+
+      if (urlStr.startsWith("/api/participants/") && method === "PATCH") {
+        const id = urlStr.split("/")[3];
+        const idx = state.participants.findIndex(p => p.id === id);
+        if (idx !== -1) {
+          state.participants[idx] = { ...state.participants[idx], ...body };
+          salvarLocal();
+          return makeResp(200, { ok: true, participant: state.participants[idx], db: state });
+        }
+        return makeResp(404, { error: "Não encontrado" });
+      }
+
+      if (urlStr.startsWith("/api/participants/") && method === "DELETE") {
+        const id = urlStr.split("/")[3];
+        state.participants = state.participants.filter(p => p.id !== id);
+        salvarLocal();
+        return makeResp(200, { ok: true, db: state });
+      }
+
+      if (urlStr === "/api/participants-bulk" && method === "POST") {
+        const eventId = body.eventId || state.activeEventId;
+        state.participants.forEach(p => {
+          if (p.eventId !== eventId) return;
+          if (body.acao === "marcar_confirmados") p.receberCertificado = p.status === "Confirmado";
+          else if (body.acao === "marcar_todos" && p.status !== "Cancelado") p.receberCertificado = true;
+          else if (body.acao === "desmarcar_todos") p.receberCertificado = false;
+        });
+        salvarLocal();
+        return makeResp(200, { ok: true, db: state });
+      }
+
+      if (urlStr === "/api/confirmar-token" && method === "POST") {
+        const p = state.participants.find(x => x.tokenConfirmacao === body.token || x.id === body.token);
+        if (!p) return makeResp(404, { error: "Link inválido" });
+        p.status = "Confirmado";
+        salvarLocal();
+        const ev = state.events.find(e => e.id === p.eventId) || state.events[0];
+        return makeResp(200, { ok: true, participant: p, event: ev });
+      }
+
+      if (urlStr.startsWith("/api/certificado/")) {
+        const codigo = decodeURIComponent(urlStr.split("/")[3] || "").trim().toUpperCase();
+        const p = state.participants.find(x => String(x.codigoCertificado).toUpperCase() === codigo);
+        if (!p || !p.receberCertificado) {
+          return makeResp(404, { error: "Certificado não encontrado ou ainda não liberado." });
+        }
+        const ev = state.events.find(e => e.id === p.eventId) || state.events[0];
+        return makeResp(200, { ok: true, participant: p, event: ev });
+      }
+
+      return makeResp(404, { error: "Rota desconhecida" });
+    };
+
+    async function carregarEstado() {
+      try {
+        if (getGoogleScriptUrl()) {
+          const res = await fetch("/api/state");
+          if (res.ok) {
+            state = await res.json();
+            salvarLocal();
+            atualizarBadgeCloud();
+            verificarRotaUrl();
+            return;
+          }
+        }
+        if (window.google && google.script && google.script.run) {
+          const res = await fetch("/api/state");
+          if (res.ok) {
+            state = await res.json();
+            salvarLocal();
+            verificarRotaUrl();
+            return;
+          }
+        } else if (window.location.protocol.startsWith("http")) {
+          const res = await _nativeFetch("/api/state");
+          if (res.ok) {
+            state = await res.json();
+            isServerMode = true;
+            salvarLocal();
+            verificarRotaUrl();
+            return;
+          }
+        }
+      } catch (e) {}
+      isServerMode = false;
+      state = carregarLocal();
+      salvarLocal();
+      verificarRotaUrl();
+    }
+
+    function verificarRotaUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const initP = window.__INITIAL_PARAMS__ || {};
+      const view = params.get("view") || initP.view || "";
+
+      if (view === "inscricao") {
+        const evtId = params.get("evento") || initP.evento || state.activeEventId;
+        renderizarTelaPublicaInscricao(evtId);
+        return;
+      }
+
+      if (view === "confirmar") {
+        const token = params.get("token") || initP.token;
+        renderizarTelaPublicaConfirmacao(token);
+        return;
+      }
+
+      if (view === "certificado") {
+        const codigo = params.get("codigo") || initP.codigo;
+        renderizarTelaPublicaCertificado(codigo);
+        return;
+      }
+
+      // Modo Organizador Padrão
+      document.getElementById("publicAdminBar").style.display = "none";
+      document.getElementById("publicContainer").style.display = "none";
+      document.getElementById("appHeader").style.display = "block";
+      document.getElementById("desktopNav").style.display = "";
+      document.getElementById("mobileNav").style.display = "";
+      document.getElementById("organizerMain").style.display = "block";
+
+      renderizarTudoOrganizador();
+    }
+
+    function voltarPainelOrganizador() {
+      window.__INITIAL_PARAMS__ = {};
+      try { window.history.pushState({}, "", window.location.pathname); } catch (e) {}
+      verificarRotaUrl();
+    }
+
+    function abrirPaginaPublicaInscricao() {
+      const ev = getActiveEvent();
+      window.history.pushState({}, "", `?view=inscricao&evento=${encodeURIComponent(ev.id)}`);
+      verificarRotaUrl();
+      document.getElementById("publicAdminBar").style.display = "flex";
+    }
+
+    function abrirPaginaPublicaCertificado(codigo) {
+      window.history.pushState({}, "", `?view=certificado&codigo=${encodeURIComponent(codigo)}`);
+      verificarRotaUrl();
+      document.getElementById("publicAdminBar").style.display = "flex";
+    }
+
+    function abrirPaginaPublicaConfirmacao(token) {
+      window.history.pushState({}, "", `?view=confirmar&token=${encodeURIComponent(token)}`);
+      verificarRotaUrl();
+      document.getElementById("publicAdminBar").style.display = "flex";
+    }
+
+    // ========================================================================
+    // RENDERIZAÇÃO DO PAINEL DO ORGANIZADOR
+    // ========================================================================
+    function renderizarTudoOrganizador() {
+      const ev = getActiveEvent();
+      if (!ev || !ev.id) return;
+
+      // Header selector
+      const sel = document.getElementById("eventSelector");
+      sel.innerHTML = state.events
+        .map(e => `<option value="${e.id}" ${e.id === ev.id ? "selected" : ""}>${e.nome}</option>`)
+        .join("");
+      document.getElementById("headerOrgName").textContent = ev.instituicao || "Instituição Sem Fins Lucrativos";
+
+      // Painel Principal
+      const parts = getEventParticipants(ev.id);
+      const ativos = parts.filter(p => p.status !== "Cancelado");
+      const confirmados = parts.filter(p => p.status === "Confirmado");
+      const pendentes = parts.filter(p => p.status === "Pendente");
+      const certificados = parts.filter(p => p.receberCertificado);
+      const limite = Number(ev.limiteVagas) || 400;
+      const restantes = Math.max(0, limite - ativos.length);
+      const pct = Math.min(100, Math.round((ativos.length / limite) * 100));
+
+      document.getElementById("dashEventName").textContent = ev.nome;
+      document.getElementById("dashEventMeta").textContent = `📅 ${ev.data} • ⏰ ${ev.horario} • 📍 ${ev.local}`;
+      document.getElementById("publicRegistrationUrlInput").value = getLinkPublicoInscricao(ev.id);
+
+      document.getElementById("kpiInscritos").textContent = `${ativos.length} / ${limite}`;
+      document.getElementById("kpiProgressBar").style.width = `${pct}%`;
+      document.getElementById("kpiVagasRestantes").textContent = `${restantes} vagas gratuitas disponíveis`;
+      document.getElementById("kpiConfirmados").textContent = confirmados.length;
+      document.getElementById("kpiPendentes").textContent = `${pendentes.length} aguardando confirmação`;
+      document.getElementById("kpiCertificados").textContent = certificados.length;
+      document.getElementById("kpiCargaHoraria").textContent = ev.cargaHoraria || "4 horas";
+
+      document.getElementById("badgeTotalInscritos").textContent = parts.length;
+      document.getElementById("badgeTotalCertificados").textContent = certificados.length;
+
+      atualizarBadgeCloud();
+      renderizarInscritos();
+      renderizarPosEvento();
+      preencherFormularioCertificado();
+      preencherFormularioConfig();
+    }
+
+    function mudarAba(aba) {
+      document.querySelectorAll(".tab-section").forEach(s => (s.style.display = "none"));
+      const target = document.getElementById(`tab-${aba}`);
+      if (target) target.style.display = "block";
+
+      document.querySelectorAll(".nav-tab, .mob-nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === aba);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ========================================================================
+    // ABA 2: INSCRITOS E CONFIRMAÇÃO WHATSAPP
+    // ========================================================================
+    function setFiltroInscritos(filtro) {
+      filtroInscritosAtual = filtro;
+      document.querySelectorAll("[data-filter]").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-filter") === filtro);
+      });
+      renderizarInscritos();
+    }
+
+    function renderizarInscritos() {
+      const ev = getActiveEvent();
+      const busca = (document.getElementById("searchInscritos")?.value || "").toLowerCase().trim();
+      let lista = getEventParticipants(ev.id);
+
+      if (filtroInscritosAtual !== "TODOS") {
+        lista = lista.filter(p => p.status === filtroInscritosAtual);
+      }
+      if (busca) {
+        lista = lista.filter(
+          p =>
+            p.nome.toLowerCase().includes(busca) ||
+            p.email.toLowerCase().includes(busca) ||
+            p.telefone.toLowerCase().includes(busca)
+        );
+      }
+
+      const container = document.getElementById("listaInscritosContainer");
+      if (lista.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:32px;color:var(--text-muted);">
+            Nenhum participante encontrado neste filtro.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = lista
+        .map(p => {
+          const badgeClass =
+            p.status === "Confirmado"
+              ? "badge-confirmado"
+              : p.status === "Cancelado"
+              ? "badge-cancelado"
+              : "badge-pendente";
+          const waConfirmUrl = montarUrlWhatsAppConfirmacao(p);
+
+          return `
+            <div class="participant-item">
+              <div class="p-info">
+                <div class="p-name">
+                  <span>${escapeHtml(p.nome)}</span>
+                  <span class="badge ${badgeClass}">${p.status}</span>
+                  ${p.receberCertificado ? '<span class="badge badge-cert">🎓 Certificado Liberado</span>' : ""}
+                </div>
+                <div class="p-meta">
+                  <span>📱 ${escapeHtml(p.telefone)}</span>
+                  <span>✉️ ${escapeHtml(p.email)}</span>
+                  <span>🕒 Inscrito em ${escapeHtml(p.criadoEm || "")}</span>
+                </div>
+              </div>
+
+              <div class="p-actions">
+                <a href="${waConfirmUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp">
+                  📲 Pedir Confirmação no WhatsApp
+                </a>
+
+                ${
+                  p.status !== "Confirmado"
+                    ? `<button class="btn btn-sm btn-soft" onclick="alterarStatusParticipante('${p.id}', 'Confirmado')">✅ Marcar Confirmado</button>`
+                    : `<button class="btn btn-sm btn-outline" onclick="alterarStatusParticipante('${p.id}', 'Pendente')">⏳ Voltar p/ Pendente</button>`
+                }
+
+                <button class="btn btn-sm btn-outline" title="Simular clique do inscrito no link de confirmação" onclick="abrirPaginaPublicaConfirmacao('${p.tokenConfirmacao || p.id}')">
+                  🔗 Ver Link Confirmação
+                </button>
+
+                <button class="btn btn-sm btn-outline" style="color:var(--danger);" title="Remover" onclick="removerParticipante('${p.id}')">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    async function alterarStatusParticipante(id, novoStatus) {
+      const res = await fetch(`/api/participants/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: novoStatus })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        renderizarTudoOrganizador();
+        mostrarToast(`Status alterado para ${novoStatus}!`);
+      }
+    }
+
+    async function removerParticipante(id) {
+      const res = await fetch(`/api/participants/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        renderizarTudoOrganizador();
+        mostrarToast("Participante removido.");
+      }
+    }
+
+    // ========================================================================
+    // ABA 3: PÓS-EVENTO — SELECIONAR PARTICIPANTES PARA RECEBER CERTIFICADO
+    // ========================================================================
+    function setFiltroCert(filtro) {
+      filtroCertAtual = filtro;
+      document.querySelectorAll("[data-certfilter]").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-certfilter") === filtro);
+      });
+      renderizarPosEvento();
+    }
+
+    function renderizarPosEvento() {
+      const ev = getActiveEvent();
+      const busca = (document.getElementById("searchPosEvento")?.value || "").toLowerCase().trim();
+      let lista = getEventParticipants(ev.id);
+
+      if (filtroCertAtual === "SIM") {
+        lista = lista.filter(p => p.receberCertificado);
+      } else if (filtroCertAtual === "NAO") {
+        lista = lista.filter(p => !p.receberCertificado);
+      }
+
+      if (busca) {
+        lista = lista.filter(
+          p =>
+            p.nome.toLowerCase().includes(busca) ||
+            p.email.toLowerCase().includes(busca) ||
+            p.telefone.toLowerCase().includes(busca) ||
+            String(p.codigoCertificado || "").toLowerCase().includes(busca)
+        );
+      }
+
+      const container = document.getElementById("listaPosEventoContainer");
+      if (lista.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:32px;color:var(--text-muted);">
+            Nenhum participante encontrado neste filtro.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = lista
+        .map(p => {
+          const waCertUrl = montarUrlWhatsAppCertificado(p);
+          const badgeClass =
+            p.status === "Confirmado"
+              ? "badge-confirmado"
+              : p.status === "Cancelado"
+              ? "badge-cancelado"
+              : "badge-pendente";
+
+          return `
+            <div class="participant-item ${p.receberCertificado ? "selected-cert" : ""}">
+              <div class="p-info">
+                <div class="p-name">
+                  <span>${escapeHtml(p.nome)}</span>
+                  <span class="badge ${badgeClass}">${p.status}</span>
+                  ${
+                    p.receberCertificado
+                      ? `<span class="badge badge-cert">🔑 ${escapeHtml(p.codigoCertificado)}</span>`
+                      : ""
+                  }
+                </div>
+                <div class="p-meta">
+                  <span>📱 ${escapeHtml(p.telefone)}</span>
+                  <span>✉️ ${escapeHtml(p.email)}</span>
+                </div>
+              </div>
+
+              <div class="p-actions">
+                <!-- CHAVE SELETORA: RECEBER CERTIFICADO -->
+                <div
+                  class="cert-toggle-wrap ${p.receberCertificado ? "on" : ""}"
+                  onclick="alternarCertificadoParticipante('${p.id}', ${!p.receberCertificado})"
+                >
+                  <div class="switch-dot"></div>
+                  <span style="font-size:12.5px;font-weight:700;">
+                    ${p.receberCertificado ? "Certificado Liberado (SIM)" : "Liberar Certificado"}
+                  </span>
+                </div>
+
+                ${
+                  p.receberCertificado
+                    ? `
+                      <a href="${waCertUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp">
+                        🎓 Enviar Certificado no WhatsApp
+                      </a>
+                      <button class="btn btn-sm btn-purple" onclick="abrirPaginaPublicaCertificado('${p.codigoCertificado}')">
+                        📄 Ver / Baixar PDF
+                      </button>
+                      <button class="btn btn-sm btn-outline" onclick="copiarTexto('${getLinkCertificadoParticipante(p)}', 'Link individual do certificado copiado!')">
+                        📋 Copiar Link
+                      </button>
+                    `
+                    : ""
+                }
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    async function alternarCertificadoParticipante(id, liberar) {
+      const res = await fetch(`/api/participants/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ receberCertificado: liberar })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        renderizarTudoOrganizador();
+        mostrarToast(
+          liberar
+            ? "🎓 Certificado liberado para o participante!"
+            : "Certificado desmarcado."
+        );
+      }
+    }
+
+    async function acaoEmLoteCertificado(acao) {
+      const ev = getActiveEvent();
+      const res = await fetch("/api/participants-bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId: ev.id, acao })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        renderizarTudoOrganizador();
+        mostrarToast("Seleção de certificados atualizada em lote!");
+      }
+    }
+
+    // ========================================================================
+    // ABA 4: EDITOR VISUAL DE CERTIFICADO PERSONALIZADO
+    // ========================================================================
+    function preencherFormularioCertificado() {
+      const ev = getActiveEvent();
+      const cfg = ev.certificadoConfig || {};
+      document.getElementById("certCorPrimaria").value = cfg.corPrimaria || "#15803d";
+      document.getElementById("certCorSecundaria").value = cfg.corSecundaria || "#ca8a04";
+      document.getElementById("certTitulo").value = cfg.titulo || "CERTIFICADO DE PARTICIPAÇÃO";
+      document.getElementById("certSubtitulo").value = cfg.subtitulo || "Certificamos para os devidos fins que";
+      document.getElementById("certTextoCorpo").value =
+        cfg.textoCorpo ||
+        'participou com êxito do evento "{EVENTO}", promovido por {INSTITUICAO}, realizado em {DATA}, cumprindo carga horária total de {CARGA_HORARIA}.';
+      document.getElementById("certCidadeData").value = cfg.cidadeData || "";
+      document.getElementById("certAss1Nome").value = cfg.assinatura1Nome || "";
+      document.getElementById("certAss1Cargo").value = cfg.assinatura1Cargo || "";
+      document.getElementById("certAss2Nome").value = cfg.assinatura2Nome || "";
+      document.getElementById("certAss2Cargo").value = cfg.assinatura2Cargo || "";
+      logoTempDataUrl = cfg.logoDataUrl || "";
+      atualizarPreviewCertificado();
+    }
+
+    function aplicarTemaCertificado(cor1, cor2) {
+      document.getElementById("certCorPrimaria").value = cor1;
+      document.getElementById("certCorSecundaria").value = cor2;
+      atualizarPreviewCertificado();
+    }
+
+    function inserirTagCert(tag) {
+      const ta = document.getElementById("certTextoCorpo");
+      const start = ta.selectionStart || ta.value.length;
+      const end = ta.selectionEnd || ta.value.length;
+      ta.value = ta.value.slice(0, start) + tag + ta.value.slice(end);
+      atualizarPreviewCertificado();
+      ta.focus();
+    }
+
+    function carregarLogoCertificado(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        logoTempDataUrl = e.target.result;
+        atualizarPreviewCertificado();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function atualizarPreviewCertificado() {
+      const ev = getActiveEvent();
+      const cor1 = document.getElementById("certCorPrimaria").value || "#15803d";
+      const cor2 = document.getElementById("certCorSecundaria").value || "#ca8a04";
+      const titulo = document.getElementById("certTitulo").value || "CERTIFICADO DE PARTICIPAÇÃO";
+      const subtitulo = document.getElementById("certSubtitulo").value || "Certificamos para os devidos fins que";
+      const corpo = document.getElementById("certTextoCorpo").value || "";
+      const cidadeData = document.getElementById("certCidadeData").value || "";
+      const ass1Nome = document.getElementById("certAss1Nome").value || "";
+      const ass1Cargo = document.getElementById("certAss1Cargo").value || "";
+      const ass2Nome = document.getElementById("certAss2Nome").value || "";
+      const ass2Cargo = document.getElementById("certAss2Cargo").value || "";
+
+      const paper = document.getElementById("liveCertPaper");
+      paper.style.setProperty("--cert-primary", cor1);
+      paper.style.setProperty("--cert-secondary", cor2);
+
+      const logoImg = document.getElementById("previewCertLogo");
+      if (logoTempDataUrl) {
+        logoImg.src = logoTempDataUrl;
+        logoImg.style.display = "inline-block";
+      } else {
+        logoImg.style.display = "none";
+      }
+
+      document.getElementById("previewOrgName").textContent = (ev.instituicao || "Instituição Sem Fins Lucrativos").toUpperCase();
+      document.getElementById("previewOrgSub").textContent = ev.cnpjOuSubtitulo || "Instituição Sem Fins Lucrativos";
+      document.getElementById("previewCertTitle").textContent = titulo;
+      document.getElementById("previewCertSubtitle").textContent = subtitulo;
+
+      const sampleParticipant = getEventParticipants(ev.id)[0] || { nome: "Ana Clara Mendes da Silva" };
+      document.getElementById("previewParticipantName").textContent = sampleParticipant.nome;
+
+      const textoRenderizado = corpo
+        .replace(/\{NOME\}/g, sampleParticipant.nome)
+        .replace(/\{EVENTO\}/g, ev.nome || "")
+        .replace(/\{INSTITUICAO\}/g, ev.instituicao || "")
+        .replace(/\{DATA\}/g, ev.data || "")
+        .replace(/\{HORARIO\}/g, ev.horario || "")
+        .replace(/\{LOCAL\}/g, ev.local || "")
+        .replace(/\{CARGA_HORARIA\}/g, ev.cargaHoraria || "");
+
+      document.getElementById("previewCertBody").textContent = textoRenderizado;
+      document.getElementById("previewCityDate").textContent = cidadeData;
+      document.getElementById("previewSig1Name").textContent = ass1Nome;
+      document.getElementById("previewSig1Role").textContent = ass1Cargo;
+
+      const sig2Block = document.getElementById("previewSig2Block");
+      if (ass2Nome.trim()) {
+        sig2Block.style.display = "block";
+        document.getElementById("previewSig2Name").textContent = ass2Nome;
+        document.getElementById("previewSig2Role").textContent = ass2Cargo;
+      } else {
+        sig2Block.style.display = "none";
+      }
+    }
+
+    async function salvarConfigCertificado() {
+      const ev = getActiveEvent();
+      const certificadoConfig = {
+        corPrimaria: document.getElementById("certCorPrimaria").value,
+        corSecundaria: document.getElementById("certCorSecundaria").value,
+        titulo: document.getElementById("certTitulo").value,
+        subtitulo: document.getElementById("certSubtitulo").value,
+        textoCorpo: document.getElementById("certTextoCorpo").value,
+        cidadeData: document.getElementById("certCidadeData").value,
+        assinatura1Nome: document.getElementById("certAss1Nome").value,
+        assinatura1Cargo: document.getElementById("certAss1Cargo").value,
+        assinatura2Nome: document.getElementById("certAss2Nome").value,
+        assinatura2Cargo: document.getElementById("certAss2Cargo").value,
+        logoDataUrl: logoTempDataUrl
+      };
+
+      const res = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: ev.id, certificadoConfig })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        mostrarToast("✅ Modelo de certificado personalizado salvo com sucesso!");
+      }
+    }
+
+    async function baixarPdfExemplo() {
+      await salvarConfigCertificado();
+      const ev = getActiveEvent();
+      const p = getEventParticipants(ev.id).find(x => x.receberCertificado) || getEventParticipants(ev.id)[0];
+      if (!p) {
+        mostrarToast("Cadastre ao menos 1 participante para testar o PDF.");
+        return;
+      }
+      if (isServerMode) { window.open(`/api/certificado/${encodeURIComponent(p.codigoCertificado)}/pdf`, "_blank"); } else { abrirPaginaPublicaCertificado(p.codigoCertificado); setTimeout(() => window.print(), 400); }
+    }
+
+    // ========================================================================
+    // ABA 5: CONFIGURAÇÕES GERAIS DO EVENTO
+    // ========================================================================
+    function preencherFormularioConfig() {
+      const ev = getActiveEvent();
+      document.getElementById("cfgNomeEvento").value = ev.nome || "";
+      document.getElementById("cfgInstituicao").value = ev.instituicao || "";
+      document.getElementById("cfgSubtituloOrg").value = ev.cnpjOuSubtitulo || "";
+      document.getElementById("cfgLimiteVagas").value = ev.limiteVagas || 400;
+      document.getElementById("cfgData").value = ev.data || "";
+      document.getElementById("cfgHorario").value = ev.horario || "";
+      document.getElementById("cfgLocal").value = ev.local || "";
+      document.getElementById("cfgCargaHoraria").value = ev.cargaHoraria || "";
+      document.getElementById("cfgDescricao").value = ev.descricao || "";
+      document.getElementById("cfgMsgConfirmacao").value = ev.msgConfirmacao || "";
+      document.getElementById("cfgMsgCertificado").value = ev.msgCertificado || "";
+    }
+
+    async function salvarConfigEvento() {
+      const ev = getActiveEvent();
+      const payload = {
+        id: ev.id,
+        nome: document.getElementById("cfgNomeEvento").value,
+        instituicao: document.getElementById("cfgInstituicao").value,
+        cnpjOuSubtitulo: document.getElementById("cfgSubtituloOrg").value,
+        limiteVagas: Math.min(400, Math.max(1, Number(document.getElementById("cfgLimiteVagas").value) || 400)),
+        data: document.getElementById("cfgData").value,
+        horario: document.getElementById("cfgHorario").value,
+        local: document.getElementById("cfgLocal").value,
+        cargaHoraria: document.getElementById("cfgCargaHoraria").value,
+        descricao: document.getElementById("cfgDescricao").value,
+        msgConfirmacao: document.getElementById("cfgMsgConfirmacao").value,
+        msgCertificado: document.getElementById("cfgMsgCertificado").value
+      };
+
+      const res = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        renderizarTudoOrganizador();
+        mostrarToast("✅ Configurações do evento salvas com sucesso!");
+      }
+    }
+
+    async function trocarEventoAtivo(eventId) {
+      const res = await fetch("/api/active-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        state = data.db;
+        renderizarTudoOrganizador();
+        mostrarToast("Evento alternado!");
+      }
+    }
+
+    // ========================================================================
+    // COMPARTILHAMENTO, MODAIS E EXPORTAÇÃO CSV
+    // ========================================================================
+    function copiarTexto(texto, msgToast) {
+      navigator.clipboard.writeText(texto).then(() => {
+        mostrarToast(msgToast || "Copiado para a área de transferência!");
+      });
+    }
+
+    function copiarLinkInscricao() {
+      const url = document.getElementById("publicRegistrationUrlInput").value;
+      copiarTexto(url, "📋 Link de inscrição copiado! Agora é só colar no WhatsApp.");
+    }
+
+    function compartilharConviteNoWhatsApp() {
+      const ev = getActiveEvent();
+      const link = getLinkPublicoInscricao(ev.id);
+      const texto =
+        `🌟 *INSCRIÇÕES GRATUITAS ABERTAS!*\n\n` +
+        `Participe do evento *${ev.nome}* promovido por *${ev.instituicao}*.\n\n` +
+        `📅 *Data:* ${ev.data}\n` +
+        `⏰ *Horário:* ${ev.horario}\n` +
+        `📍 *Local:* ${ev.local}\n` +
+        `🎓 *Certificado incluso:* ${ev.cargaHoraria}\n\n` +
+        `Garanta sua vaga gratuita (limite de ${ev.limiteVagas || 400} vagas) clicando no link abaixo:\n${link}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, "_blank");
+    }
+
+    function abrirModalNovoInscrito() {
+      document.getElementById("modNome").value = "";
+      document.getElementById("modEmail").value = "";
+      document.getElementById("modTelefone").value = "";
+      document.getElementById("modalNovoInscrito").classList.add("open");
+    }
+
+    function abrirModalNovoEvento() {
+      document.getElementById("newEvtNome").value = "";
+      document.getElementById("modalNovoEvento").classList.add("open");
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    async function salvarNovoInscritoManual() {
+      const ev = getActiveEvent();
+      const nome = document.getElementById("modNome").value.trim();
+      const email = document.getElementById("modEmail").value.trim();
+      const telefone = document.getElementById("modTelefone").value.trim();
+      const status = document.getElementById("modStatus").value;
+      const receberCertificado = document.getElementById("modCert").value === "true";
+
+      if (!nome || !email || !telefone) {
+        mostrarToast("Preencha Nome Completo, E-mail e Telefone.");
+        return;
+      }
+
+      const res = await fetch("/api/participants", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId: ev.id, nome, email, telefone, status, receberCertificado })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        mostrarToast(data.error || "Erro ao cadastrar.");
+        return;
+      }
+      state = data.db;
+      fecharModal("modalNovoInscrito");
+      renderizarTudoOrganizador();
+      mostrarToast("✅ Participante cadastrado com sucesso!");
+    }
+
+    async function criarNovoEvento() {
+      const nome = document.getElementById("newEvtNome").value.trim();
+      const instituicao = document.getElementById("newEvtInst").value.trim();
+      const data = document.getElementById("newEvtData").value.trim() || "30/11/2026";
+      const horario = document.getElementById("newEvtHorario").value.trim() || "14h00 às 18h00";
+      const cargaHoraria = document.getElementById("newEvtCarga").value.trim() || "4 horas";
+      const limiteVagas = Number(document.getElementById("newEvtVagas").value) || 400;
+      const local = document.getElementById("newEvtLocal").value.trim() || "Auditório Principal";
+
+      if (!nome || !instituicao) {
+        mostrarToast("Informe o Nome do Evento e da Instituição.");
+        return;
+      }
+
+      const res = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, instituicao, data, horario, cargaHoraria, limiteVagas, local })
+      });
+      if (res.ok) {
+        const resp = await res.json();
+        state = resp.db;
+        fecharModal("modalNovoEvento");
+        renderizarTudoOrganizador();
+        mostrarToast("✨ Novo evento criado e selecionado!");
+      }
+    }
+
+    function exportarCSV() {
+      const ev = getActiveEvent();
+      const parts = getEventParticipants(ev.id);
+      const headers = [
+        "Nome Completo",
+        "E-mail",
+        "Telefone WhatsApp",
+        "Status Inscricao",
+        "Receber Certificado",
+        "Codigo Certificado",
+        "Link Individual Certificado",
+        "Data Inscricao"
+      ];
+      const rows = parts.map(p => [
+        `"${(p.nome || "").replace(/"/g, '""')}"`,
+        `"${(p.email || "").replace(/"/g, '""')}"`,
+        `"${(p.telefone || "").replace(/"/g, '""')}"`,
+        `"${p.status || ""}"`,
+        `"${p.receberCertificado ? "SIM" : "NAO"}"`,
+        `"${p.codigoCertificado || ""}"`,
+        `"${p.receberCertificado ? getLinkCertificadoParticipante(p) : ""}"`,
+        `"${p.criadoEm || ""}"`
+      ]);
+      const csvContent = "\uFEFF" + [headers.join(";"), ...rows.map(r => r.join(";"))].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Inscritos_${ev.slug || "evento"}.csv`;
+      link.click();
+    }
+
+    // ========================================================================
+    // TELA PÚBLICA 1: PÁGINA DE INSCRIÇÃO PELO LINK DO WHATSAPP
+    // ========================================================================
+    function renderizarTelaPublicaInscricao(eventId) {
+      esconderChromeOrganizador();
+      const ev = state.events.find(e => e.id === eventId) || getActiveEvent();
+      const ativos = getEventParticipants(ev.id).filter(p => p.status !== "Cancelado");
+      const limite = Number(ev.limiteVagas) || 400;
+      const vagasRestantes = Math.max(0, limite - ativos.length);
+      const lotado = vagasRestantes <= 0;
+
+      const pub = document.getElementById("publicContainer");
+      pub.style.display = "block";
+      pub.innerHTML = `
+        <div class="public-reg-wrap">
+          <div class="public-hero">
+            <span class="badge" style="background:rgba(255,255,255,0.2);color:#fff;margin-bottom:10px;">
+              🎟️ INSCRIÇÃO 100% GRATUITA • CERTIFICADO INCLUSO
+            </span>
+            <div style="font-size:13px;font-weight:700;opacity:0.9;text-transform:uppercase;letter-spacing:1px;">
+              ${escapeHtml(ev.instituicao || "")}
+            </div>
+            <h1 style="font-size:23px;font-weight:800;margin:6px 0 12px;line-height:1.25;">
+              ${escapeHtml(ev.nome || "")}
+            </h1>
+            <div style="font-size:13.5px;display:flex;flex-direction:column;gap:4px;opacity:0.95;">
+              <div>📅 <strong>Data:</strong> ${escapeHtml(ev.data || "")} às ${escapeHtml(ev.horario || "")}</div>
+              <div>📍 <strong>Local:</strong> ${escapeHtml(ev.local || "")}</div>
+              <div>🎓 <strong>Certificado de Participação:</strong> ${escapeHtml(ev.cargaHoraria || "")}</div>
+            </div>
+          </div>
+
+          <div class="public-body">
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;">
+              ${escapeHtml(ev.descricao || "")}
+            </p>
+
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:12px 14px;border-radius:10px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:13px;font-weight:700;color:#166534;">Vagas Gratuitas Disponíveis:</span>
+              <span class="badge badge-confirmado" style="font-size:13px;">${vagasRestantes} de ${limite} vagas</span>
+            </div>
+
+            ${
+              lotado
+                ? `
+                  <div style="background:#fee2e2;color:#991b1b;padding:18px;border-radius:12px;text-align:center;font-weight:700;">
+                    As inscrições gratuitas para este evento atingiram a capacidade máxima de ${limite} participantes.
+                  </div>
+                `
+                : `
+                  <form id="publicRegForm" onsubmit="enviarInscricaoPublica(event, '${ev.id}')">
+                    <div class="form-group" style="margin-bottom:14px;">
+                      <label class="form-label">Nome Completo (Como sairá no Certificado) *</label>
+                      <input id="pubNome" type="text" class="form-input" required placeholder="Digite seu nome completo" />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:14px;">
+                      <label class="form-label">Seu E-mail *</label>
+                      <input id="pubEmail" type="email" class="form-input" required placeholder="seuemail@exemplo.com" />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:18px;">
+                      <label class="form-label">Telefone / WhatsApp com DDD *</label>
+                      <input id="pubTelefone" type="tel" class="form-input" required placeholder="(45) 99999-9999" oninput="mascaraTelefone(this)" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="padding:14px;font-size:15px;">
+                      ✅ Garantir Minha Inscrição Gratuita
+                    </button>
+                  </form>
+                `
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    async function enviarInscricaoPublica(e, eventId) {
+      e.preventDefault();
+      const nome = document.getElementById("pubNome").value.trim();
+      const email = document.getElementById("pubEmail").value.trim();
+      const telefone = document.getElementById("pubTelefone").value.trim();
+
+      const res = await fetch("/api/participants", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, nome, email, telefone })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Não foi possível concluir a inscrição.");
+        return;
+      }
+
+      state = data.db;
+      const p = data.participant;
+      const ev = state.events.find(x => x.id === eventId) || getActiveEvent();
+
+      document.getElementById("publicContainer").innerHTML = `
+        <div class="public-reg-wrap">
+          <div class="card" style="text-align:center;padding:30px 22px;border-top:6px solid #15803d;">
+            <div style="font-size:46px;margin-bottom:8px;">🎉</div>
+            <span class="badge badge-confirmado" style="margin-bottom:10px;">INSCRIÇÃO RECEBIDA COM SUCESSO!</span>
+            <h2 style="font-size:21px;margin-bottom:8px;">Olá, ${escapeHtml(p.nome)}!</h2>
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:18px;">
+              Sua vaga para o evento <strong>${escapeHtml(ev.nome)}</strong> foi registrada. Você receberá uma mensagem no seu WhatsApp <strong>${escapeHtml(p.telefone)}</strong> para confirmação da presença.
+            </p>
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:left;font-size:13.5px;margin-bottom:18px;">
+              <div><strong>📌 Protocolo:</strong> ${escapeHtml(p.codigoCertificado)}</div>
+              <div><strong>📅 Data e Horário:</strong> ${escapeHtml(ev.data)} • ${escapeHtml(ev.horario)}</div>
+              <div><strong>📍 Local:</strong> ${escapeHtml(ev.local)}</div>
+            </div>
+            <button class="btn btn-outline btn-block" onclick="renderizarTelaPublicaInscricao('${ev.id}')">
+              ➕ Fazer Outra Inscrição
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ========================================================================
+    // TELA PÚBLICA 2: CONFIRMAÇÃO DE INSCRIÇÃO EM 1 CLIQUE PELO WHATSAPP
+    // ========================================================================
+    async function renderizarTelaPublicaConfirmacao(token) {
+      esconderChromeOrganizador();
+      const pub = document.getElementById("publicContainer");
+      pub.style.display = "block";
+      pub.innerHTML = `<div class="public-reg-wrap"><div class="card" style="text-align:center;padding:36px;">Confirmando sua presença...</div></div>`;
+
+      const res = await fetch("/api/confirmar-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token })
+      });
+
+      if (!res.ok) {
+        pub.innerHTML = `
+          <div class="public-reg-wrap">
+            <div class="card" style="text-align:center;padding:32px;">
+              <h2>Link de confirmação não encontrado</h2>
+              <p style="color:var(--text-muted);margin-top:8px;">Verifique o link recebido no seu WhatsApp.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const data = await res.json();
+      const p = data.participant;
+      const ev = data.event;
+      await carregarEstadoSilencioso();
+
+      pub.innerHTML = `
+        <div class="public-reg-wrap">
+          <div class="card" style="text-align:center;padding:32px 24px;border-top:6px solid #16a34a;">
+            <div style="font-size:48px;margin-bottom:8px;">✅</div>
+            <span class="badge badge-confirmado" style="font-size:13px;margin-bottom:10px;">PRESENÇA CONFIRMADA!</span>
+            <h2 style="font-size:22px;margin-bottom:8px;">Obrigado, ${escapeHtml(p.nome)}!</h2>
+            <p style="font-size:14.5px;color:var(--text-muted);margin-bottom:18px;">
+              Sua inscrição no evento <strong>${escapeHtml(ev.nome)}</strong> promovido por <strong>${escapeHtml(ev.instituicao)}</strong> está 100% confirmada.
+            </p>
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px;text-align:left;font-size:14px;">
+              <div>📅 <strong>Data:</strong> ${escapeHtml(ev.data)}</div>
+              <div>⏰ <strong>Horário:</strong> ${escapeHtml(ev.horario)}</div>
+              <div>📍 <strong>Local:</strong> ${escapeHtml(ev.local)}</div>
+              <div>🎓 <strong>Certificado:</strong> Liberado após o evento (${escapeHtml(ev.cargaHoraria)})</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ========================================================================
+    // TELA PÚBLICA 3: PÁGINA INDIVIDUAL DO CERTIFICADO + DOWNLOAD EM PDF
+    // ========================================================================
+    async function renderizarTelaPublicaCertificado(codigo) {
+      esconderChromeOrganizador();
+      const pub = document.getElementById("publicContainer");
+      pub.style.display = "block";
+      pub.innerHTML = `<div class="public-reg-wrap"><div class="card" style="text-align:center;padding:36px;">Carregando seu certificado...</div></div>`;
+
+      const res = await fetch(`/api/certificado/${encodeURIComponent(codigo || "")}`);
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        pub.innerHTML = `
+          <div class="public-reg-wrap">
+            <div class="card" style="text-align:center;padding:32px;">
+              <div style="font-size:42px;margin-bottom:8px;">⏳</div>
+              <h2 style="font-size:19px;">Certificado Indisponível</h2>
+              <p style="color:var(--text-muted);margin-top:8px;">
+                ${escapeHtml(errData.error || "Este certificado ainda não foi liberado pela organização do evento.")}
+              </p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const { participant: p, event: ev } = await res.json();
+      const cfg = ev.certificadoConfig || {};
+      const cor1 = cfg.corPrimaria || "#15803d";
+      const cor2 = cfg.corSecundaria || "#ca8a04";
+      const textoCorpo = (
+        cfg.textoCorpo ||
+        'participou com êxito do evento "{EVENTO}", promovido por {INSTITUICAO}, realizado em {DATA}, cumprindo carga horária total de {CARGA_HORARIA}.'
+      )
+        .replace(/\{NOME\}/g, p.nome)
+        .replace(/\{EVENTO\}/g, ev.nome || "")
+        .replace(/\{INSTITUICAO\}/g, ev.instituicao || "")
+        .replace(/\{DATA\}/g, ev.data || "")
+        .replace(/\{HORARIO\}/g, ev.horario || "")
+        .replace(/\{LOCAL\}/g, ev.local || "")
+        .replace(/\{CARGA_HORARIA\}/g, ev.cargaHoraria || "");
+
+      const pdfDownloadUrl = `/api/certificado/${encodeURIComponent(p.codigoCertificado)}/pdf`;
+
+      pub.innerHTML = `
+        <div class="main-container">
+          <div class="card no-print" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#f0fdf4;border-color:#86efac;">
+            <div>
+              <span class="badge badge-confirmado">✅ CERTIFICADO AUTÊNTICO VERIFICADO</span>
+              <h2 style="font-size:18px;margin-top:4px;color:#14532d;">${escapeHtml(p.nome)}</h2>
+              <div style="font-size:13px;color:#166534;">Código de Validação: <strong>${escapeHtml(p.codigoCertificado)}</strong></div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a href="${pdfDownloadUrl}" class="btn btn-primary" download>
+                📥 Baixar Certificado em PDF
+              </a>
+              <button class="btn btn-outline" onclick="window.print()">
+                🖨️ Imprimir / Salvar Alta Resolução
+              </button>
+            </div>
+          </div>
+
+          <div class="cert-preview-shell">
+            <div class="cert-paper" style="--cert-primary:${cor1}; --cert-secondary:${cor2};">
+              <div class="cert-outer-frame">
+                <div class="cert-inner-frame">
+                  <div class="cert-org-header">
+                    ${
+                      cfg.logoDataUrl
+                        ? `<img src="${cfg.logoDataUrl}" class="cert-logo-img" alt="Logo" />`
+                        : ""
+                    }
+                    <div class="cert-org-name">${escapeHtml((ev.instituicao || "").toUpperCase())}</div>
+                    <div class="cert-org-sub">${escapeHtml(ev.cnpjOuSubtitulo || "Instituição Sem Fins Lucrativos")}</div>
+                    <div class="cert-main-title">${escapeHtml(cfg.titulo || "CERTIFICADO DE PARTICIPAÇÃO")}</div>
+                    <div class="cert-intro">${escapeHtml(cfg.subtitulo || "Certificamos para os devidos fins que")}</div>
+                  </div>
+
+                  <div>
+                    <div class="cert-participant-name">${escapeHtml(p.nome)}</div>
+                    <p class="cert-body-text">${escapeHtml(textoCorpo)}</p>
+                  </div>
+
+                  <div>
+                    <div class="cert-city-date">${escapeHtml(cfg.cidadeData || ev.data || "")}</div>
+                    <div class="cert-signatures">
+                      <div class="cert-sig-block">
+                        <div class="cert-sig-line">${escapeHtml(cfg.assinatura1Nome || "Coordenação Geral")}</div>
+                        <div class="cert-sig-role">${escapeHtml(cfg.assinatura1Cargo || ev.instituicao || "")}</div>
+                      </div>
+                      ${
+                        cfg.assinatura2Nome && cfg.assinatura2Nome.trim()
+                          ? `
+                            <div class="cert-sig-block">
+                              <div class="cert-sig-line">${escapeHtml(cfg.assinatura2Nome)}</div>
+                              <div class="cert-sig-role">${escapeHtml(cfg.assinatura2Cargo || "")}</div>
+                            </div>
+                          `
+                          : ""
+                      }
+                    </div>
+                    <div class="cert-footer-code">
+                      <span>Documento emitido gratuitamente • Instituição Sem Fins Lucrativos</span>
+                      <span>Código de Autenticidade: <strong>${escapeHtml(p.codigoCertificado)}</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function esconderChromeOrganizador() {
+      document.getElementById("appHeader").style.display = "none";
+      document.getElementById("desktopNav").style.display = "none";
+      document.getElementById("mobileNav").style.display = "none";
+      document.getElementById("organizerMain").style.display = "none";
+    }
+
+    async function carregarEstadoSilencioso() {
+      try {
+        const res = await fetch("/api/state");
+        if (res.ok) state = await res.json();
+      } catch (e) {}
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    window.addEventListener("popstate", verificarRotaUrl);
+    carregarEstado();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4b9911f0ed9f1a5',t:'MTc5MjE3OTk1Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
